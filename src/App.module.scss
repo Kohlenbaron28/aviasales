@@ -1,0 +1,38 @@
+body {
+  background: #f3f7fa;
+}
+.app {
+  text-align: center;
+  font-family: "Open Sans";
+  margin: 50px 103px;
+  &__div {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+@media (max-width: 900px) {
+  .app {
+    text-align: center;
+    font-family: "Open Sans";
+    margin: 25px 50px;
+  }
+}
+@media (max-width: 750px) {
+  .app {
+    text-align: center;
+    font-family: "Open Sans";
+    margin: 25px 20px;
+  }
+}
+@media (max-width: 600px) {
+  .app {
+    text-align: center;
+    font-family: "Open Sans";
+    margin: 25px 20px;
+    &__div {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+}
