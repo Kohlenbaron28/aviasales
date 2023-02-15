@@ -1,27 +1,25 @@
-import { useDispatch } from 'react-redux';
 import { useState } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-import { sortByPrice, sortByDuration, sortByOptimal } from '../../store/ticketsSlice';
+import * as actions from '../../store/actions';
 
 import classes from './Filter.module.scss';
 
-export default function Filter() {
+const Filter = ({ sortType, sortByPrice, sortByDuration, sortByOptimal }) => {
   const [price, setPrice] = useState(false);
   const [duration, setDuration] = useState(false);
   const [optimal, setOptimal] = useState(false);
-
-  const dispatch = useDispatch();
-
+  console.log(sortType);
   return (
     <form className={classes.form}>
       <div
         className={classes['form_radio_btn first']}
         onClick={() => {
-          dispatch(sortByPrice());
+          sortByPrice();
           setPrice(true);
           setDuration(false);
           setOptimal(false);
-          // console.log(e.target.value);
         }}
       >
         <input
@@ -40,11 +38,10 @@ export default function Filter() {
       <div
         className={classes['form_radio_btn second']}
         onClick={() => {
-          dispatch(sortByDuration());
+          sortByDuration();
           setPrice(false);
           setDuration(true);
           setOptimal(false);
-          //console.log(e.target.value);
         }}
       >
         <input
@@ -63,11 +60,10 @@ export default function Filter() {
       <div
         className={classes['form_radio_btn']}
         onClick={() => {
-          dispatch(sortByOptimal());
+          sortByOptimal();
           setPrice(false);
           setDuration(false);
           setOptimal(true);
-          //console.log(e.target.value);
         }}
       >
         <input
@@ -84,4 +80,21 @@ export default function Filter() {
       </div>
     </form>
   );
-}
+};
+
+const mapStateToProps = (state) => {
+  return {
+    sortType: state.sortStation,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  const { sortByPrice, sortByDuration, sortByOptimal } = bindActionCreators(actions, dispatch);
+  return {
+    sortByPrice,
+    sortByDuration,
+    sortByOptimal,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

@@ -12,7 +12,7 @@ const ticketSlice = createSlice({
       state.showAllTickets = action.payload;
     },
     setValueFilterTicket(state, action) {
-      console.log(state);
+      console.log(current(state));
       console.log(action);
       if (action.payload.isChecked) {
         state.valueFilterTransfer.push(action.payload.filterValue);
@@ -21,8 +21,8 @@ const ticketSlice = createSlice({
       }
     },
     sortByPrice(state) {
-      console.log(state);
       const filterTickes = current(state.tickets).slice();
+      console.log(filterTickes);
       filterTickes.sort((prev, next) => (prev.price > next.price ? 1 : -1));
     },
     sortByDuration(state) {
