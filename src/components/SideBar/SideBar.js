@@ -6,18 +6,13 @@ import * as actions from '../../store/actions';
 
 import classes from './SideBar.module.scss';
 
-const SideBar = ({ tickets, all, zero, one, two, three, getTicketsById, stop }) => {
+const SideBar = ({ all, zero, one, two, three, showZero }) => {
   const [checkedAllTicket, setCheckedAllTicket] = useState(false);
   const [checkedZero, setCheckedZero] = useState(false);
   const [checkedOne, setCheckedOne] = useState(false);
   const [checkedTwo, setCheckedTwo] = useState(false);
   const [checkedThree, setCheckedThree] = useState(false);
-
-  console.log(tickets, stop);
-
-  useEffect(() => {
-    getTicketsById();
-  }, []);
+  console.log(showZero);
   useEffect(() => {
     if (checkedZero && checkedOne && checkedTwo && checkedThree) {
       all({
@@ -30,34 +25,9 @@ const SideBar = ({ tickets, all, zero, one, two, three, getTicketsById, stop }) 
       setCheckedAllTicket(true);
     } else {
       setCheckedAllTicket(false);
-      //all({ payload: false });
     }
   }, [checkedZero, checkedOne, checkedTwo, checkedThree]);
-  useEffect(() => {
-    getTicketsById();
-  }, []);
 
-  //   useEffect(() => {
-  //     all();
-  //   }, [checkedAllTicket]);
-  //   useEffect(() => {
-  //     zero();
-  //   }, [checkedZero]);
-  //   useEffect(() => {
-  //     one();
-  //   }, [checkedOne]);
-  //   useEffect(() => {
-  //     two();
-  //   }, [checkedTwo]);
-  //   useEffect(() => {
-  //     three;
-  //   }, [checkedThree]);
-  //   const fetchingId = () => {
-  //     fetch('https://aviasales-test-api.kata.academy/search')
-  //       .then((res) => res.json())
-  //       .then((res) => res.searchId);
-  //   };
-  //   fetchingId();
   const handleChange = (e) => {
     switch (e.target.name) {
       case 'All':
@@ -89,8 +59,13 @@ const SideBar = ({ tickets, all, zero, one, two, three, getTicketsById, stop }) 
         setCheckedAllTicket(e.target.checked);
         break;
       case 'Zero':
-        zero({ payload: e.target.checked });
-        setCheckedZero(e.target.checked);
+        try {
+          zero({ payload: e.target.checked });
+          setCheckedZero(e.target.checked);
+        } catch (err) {
+          console.log(err);
+        }
+
         break;
       case 'One':
         one({ payload: e.target.checked });
@@ -185,22 +160,19 @@ const SideBar = ({ tickets, all, zero, one, two, three, getTicketsById, stop }) 
 
 const mapStateToProps = (state) => {
   return {
-    tickets: state.tickets,
-    stop: state.stop,
+    showZero: state.showZeroDuration,
   };
 };
 
-const mapDicpatchToProps = (dispatch) => {
-  const { all, zero, one, two, three, getTicketsById, getId } = bindActionCreators(actions, dispatch);
+const mapDispatchToProps = (dispatch) => {
+  const { all, zero, one, two, three } = bindActionCreators(actions, dispatch);
   return {
     all,
     zero,
     one,
     two,
     three,
-    getTicketsById,
-    getId,
   };
 };
 
-export default connect(mapStateToProps, mapDicpatchToProps)(SideBar);
+export default connect(mapStateToProps, mapDispatchToProps)(SideBar);

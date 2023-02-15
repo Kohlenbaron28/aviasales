@@ -1,6 +1,8 @@
 const initialState = {
   tickets: [],
-  id: null,
+  id: '',
+  error: null,
+  isStop: false,
   sortStation: null,
   showAllTickets: false,
   showZeroDuration: false,
@@ -11,7 +13,6 @@ const initialState = {
 };
 
 export const checkboxReducer = (state = initialState, action) => {
-  console.log(state);
   switch (action.type) {
     case 'SHOW_ALL':
       if (
@@ -107,6 +108,28 @@ export const checkboxReducer = (state = initialState, action) => {
         stop: action.stop,
         loading: false,
       });
+    case 'UPDATE_PACKET_TICKETS':
+      return {
+        ...state,
+        tickets: [...state.tickets, ...action.payload],
+        loading: false,
+      };
+    case 'UPDATE_SEARCH_ID':
+      return {
+        ...state,
+        id: action.payload,
+      };
+    case 'TOGGLE_STOP':
+      return {
+        ...state,
+        isStop: action.payload,
+      };
+
+    case 'TICKETS_ERROR':
+      return {
+        ...state,
+        error: action.payload,
+      };
     default:
       return state;
   }

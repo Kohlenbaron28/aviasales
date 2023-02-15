@@ -1,3 +1,5 @@
+import apiServise from './service';
+
 export const all = (payload, zeroP, oneP, twoP, threeP) => {
   return { type: 'SHOW_ALL', payload, zeroP, oneP, twoP, threeP };
 };
@@ -22,54 +24,31 @@ export const sortByDuration = () => {
 export const sortByOptimal = () => {
   return { type: 'SORT_BY_OPTIMAL' };
 };
-export const getId = () => {
-  return fetch('https://aviasales-test-api.kata.academy/search').then((res) => res.json());
-};
+export const updateSearchId = (searchId) => ({
+  type: 'UPDATE_SEARCH_ID',
+  payload: searchId,
+});
+export const updatePacketTickets = (tickets) => ({
+  type: 'UPDATE_PACKET_TICKETS',
+  payload: tickets,
+});
+export const ticketsError = (error) => ({
+  type: 'TICKETS_ERROR',
+  payload: error,
+});
+export const toggleStop = (booleanValue) => ({
+  type: 'TOGGLE_STOP',
+  payload: booleanValue,
+});
 
-export const getTicketsById = () => {
-  let idd = null;
-  //let arr = [];
+export const getTicketsById = (searchId) => {
   return function (dispatch) {
-    getId()
-      .then((res) => {
-        idd = res.searchId;
-        return res.searchId;
-      })
-      .then((id) => {
-        console.log(idd);
-        return fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${id}`);
-      })
-      //   .then((res) => {
-      //     res.json();
-      //     arr.push(res);
-      //     console.log(arr);
-      //     while (res.stop === false) {
-      //       let val = fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${idd}`);
-      //       arr.push(val.json());
-      //     }
-      //     return arr;
-      //   })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        dispatch({
-          type: 'GET_TICKETS',
-          ticketsVal: res.tickets,
-          stop: res.stop,
-        });
-      });
+    apiServise.getTickets(searchId).then((res) => {
+      dispatch(updatePacketTickets(res.tickets));
+      // если от сервера пришло, что stops: true обновляет isStop
+      if (res.stop) {
+        dispatch(toggleStop(res.stop));
+      }
+    });
   };
 };
-// export const getId = () => {
-//     return function (dispatch) {
-//       fetch('https://aviasales-test-api.kata.academy/search')
-//         .then((res) => res.searchId)
-//         .then((res) => res.json())
-//         .then((id) =>
-//           dispatch({
-//             type: 'GET_TICKETS_ID',
-//             id: id,
-//           })
-//         );
-//     };
-//   };
