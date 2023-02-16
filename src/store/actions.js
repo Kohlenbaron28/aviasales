@@ -32,6 +32,10 @@ export const updatePacketTickets = (tickets) => ({
   type: 'UPDATE_PACKET_TICKETS',
   payload: tickets,
 });
+export const showMore = (ten) => ({
+  type: 'SHOW_MORE',
+  payload: ten,
+});
 export const ticketsError = (error) => ({
   type: 'TICKETS_ERROR',
   payload: error,

@@ -1,7 +1,9 @@
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import Filter from '../Filter/Filter';
 import Card from '../Card/Card';
+import * as actions from '../../store/actions';
 
 import classes from './CardList.module.scss';
 
@@ -9,8 +11,9 @@ let max = 1;
 let firstName = '';
 let secondName = '';
 
-const CardList = ({ tickets }) => {
-  const elements = tickets.map((ticket) => {
+const CardList = ({ ten, tickets, showMore, showCount }) => {
+  console.log(ten);
+  const elements = tickets.slice(0, showCount).map((ticket) => {
     if (ticket.segments[0].stops.length === 1) {
       firstName = '1 пересадка';
     } else if (ticket.segments[0].stops.length === 2) {
@@ -80,7 +83,14 @@ const CardList = ({ tickets }) => {
       <Filter />
       {elements}
 
-      <button className={classes.btn}>Показать еще 5 билетов!</button>
+      <button
+        className={classes.btn}
+        onClick={() => {
+          showMore();
+        }}
+      >
+        Показать еще 10 билетов!
+      </button>
     </div>
   );
 };
@@ -88,7 +98,17 @@ const CardList = ({ tickets }) => {
 const mapStateToProps = (state) => {
   return {
     tickets: state.tickets,
+    ten: state.ten,
+    showCount: state.showCount,
   };
 };
 
-export default connect(mapStateToProps)(CardList);
+const mapDispatchToProps = (dispatch) => {
+  const { toggleStop, showMore } = bindActionCreators(actions, dispatch);
+  return {
+    toggleStop,
+    showMore,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardList);

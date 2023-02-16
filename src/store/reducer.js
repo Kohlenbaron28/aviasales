@@ -1,5 +1,6 @@
 const initialState = {
   tickets: [],
+  showCount: 10,
   id: '',
   error: null,
   isStop: false,
@@ -97,22 +98,16 @@ export const checkboxReducer = (state = initialState, action) => {
             : -1
         ),
       });
-    case 'GET_TICKETS_ID':
-      return {
-        ...state,
-        id: action.id,
-      };
-    case 'GET_TICKETS':
-      return Object.assign({}, state, {
-        tickets: [...state.tickets, ...action.ticketsVal],
-        stop: action.stop,
-        loading: false,
-      });
     case 'UPDATE_PACKET_TICKETS':
       return {
         ...state,
         tickets: [...state.tickets, ...action.payload],
         loading: false,
+      };
+    case 'SHOW_MORE':
+      return {
+        ...state,
+        showCount: (state.showCount += 10),
       };
     case 'UPDATE_SEARCH_ID':
       return {
